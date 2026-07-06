@@ -1,0 +1,46 @@
+name: Сборка APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Забираем код
+        uses: actions/checkout@v4
+
+      - name: Ставим Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ставим Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Настраиваем Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Устанавливаем зависимости
+        run: npm install
+
+      - name: Генерируем нативный Android-проект
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Собираем APK
+        run: |
+          cd android
+          chmod +x ./gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Публикуем APK как артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: plan-dnya-apk
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
