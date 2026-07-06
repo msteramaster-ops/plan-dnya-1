@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Мой план дня",
+    "slug": "plan-dnya",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2F5D50"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#2F5D50"
+      },
+      "package": "com.planner.plandnya"
+    },
+    "plugins": [
+      "expo-splash-screen"
+    ]
+  }
+}
