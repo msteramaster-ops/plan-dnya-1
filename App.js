@@ -50,6 +50,12 @@ export default function App() {
     }
   }, []);
 
+  // Android иногда убивает процесс рендерера WebView (нехватка памяти,
+  // возврат из фона) — без этого хэндлера экран остаётся белым навсегда
+  const onRenderProcessGone = useCallback(() => {
+    webViewRef.current?.reload();
+  }, []);
+
   // Пока данные не загружены, показываем загрузочный экран в цвете приложения
   if (bootstrapJS === null) {
     return (
@@ -69,10 +75,12 @@ export default function App() {
         style={styles.webview}
         injectedJavaScriptBeforeContentLoaded={bootstrapJS}
         onMessage={onMessage}
+        onRenderProcessGone={onRenderProcessGone}
         originWhitelist={['*']}
         javaScriptEnabled
         domStorageEnabled
         startInLoadingState
+        androidLayerType="software"
         renderLoading={() => (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color="#F6F4EF" />
